@@ -1,0 +1,84 @@
+{% extends "schedule_tests/base.html" %}
+{% load i18n %}
+{% load scheduletags %}
+
+{% block tab-id %}clubs-tab{% endblock %}
+
+{% block extra_head %}
+{{ block.super }}
+<script type="text/javascript">
+Timeline_ajax_url="{{ MEDIA_URL }}timeline/timeline_ajax/simile-ajax-api.js";
+Timeline_urlPrefix='{{ MEDIA_URL }}timeline/timeline_js/';       
+Timeline_parameters='bundle=true';
+</script>
+<script type="text/javascript" src="{{ MEDIA_URL }}timeline/timeline_js/timeline-api.js"></script>
+{% endblock %}
+
+{% block left_menu %}
+<ul class="commands">
+    <li><a href="{% url edit_club club.id %}">Edit</a></li>
+    <li><a href="{% url create_meeting club.id %}">Add meeting</a></li>
+    <li><a href="{% url list_clubs %}">Back</a></li>
+</ul>
+{% endblock %}
+
+{% block body %}
+    {% get_calendar club as cal %}
+    <h1>Club: {{ club.name }}
+        <span>
+            <a href="{% url show_club club.id %}">Details</a>
+            <a href="{% url show_club_timeline club.id %}" class="active">Timeline</a>
+            <a href="{% url compact_calendar cal.slug %}">Small Month</a>
+            <a href="{% url month_calendar cal.slug %}">1 Month</a>
+            <a href="{% url tri_month_calendar cal.slug %}">3 Months</a>
+            <a href="{% url year_calendar cal.slug %}">This Year</a>
+            <a href="{% url week_calendar cal.slug %}">Weekly</a>
+            <a href="{% url day_calendar cal.slug %}">Daily</a>
+            <a href="/schedule/feed/calendar/upcoming/{{ cal.id }}/">Feed</a>
+        </span>
+    </h1>
+
+    {% if club.meetings %}
+    <div id="my-timeline" style="height: 300px; border: 1px solid #aaa"></div>
+    
+    <script type="text/javascript">
+    var tl;
+    var resizeTimerID = null;
+    
+    $(function(){
+        var eventSource = new Timeline.DefaultEventSource();
+        var bandInfos = [
+            Timeline.createBandInfo({
+                eventSource:    eventSource,
+                date:           "Jun 1 2009 00:00:00 GMT",
+                width:          "70%", 
+                intervalUnit:   Timeline.DateTime.MONTH, 
+                intervalPixels: 100
+            }),
+            Timeline.createBandInfo({
+                eventSource:    eventSource,
+                date:           "Jun 1 2009 00:00:00 GMT",
+                width:          "30%", 
+                intervalUnit:   Timeline.DateTime.YEAR, 
+                intervalPixels: 200
+            })
+        ];
+        bandInfos[1].syncWith = 0;
+        bandInfos[1].highlight = true;
+        
+        tl = Timeline.create(document.getElementById("my-timeline"), bandInfos);
+        
+        Timeline.loadXML("{% url timeline_data cal.slug %}", function(xml, url) { eventSource.loadXML(xml, url); });
+        
+        $(window).bind('resize', function() {
+            if (resizeTimerID == null) {
+                resizeTimerID = window.setTimeout(function() {
+                    resizeTimerID = null;
+                    tl.layout();
+                }, 500);
+            }
+        });
+    });
+    </script>
+    {% endif %}
+{% endblock %}

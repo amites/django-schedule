@@ -1,0 +1,18 @@
+{% extends "schedule_tests/base.html" %}
+{% load i18n %}
+
+{% block tab-id %}meetings-tab{% endblock %}
+
+{% block body %}
+    <h1>Edit meeting for {{ meeting.club.name }}</h1>
+    <form action="{% url edit_meeting meeting.id %}" method="post">
+        <fieldset class="inlineLabels">
+            <table>
+                {{ form.as_table }}
+            </table>
+            <div class="buttonHolder">
+                <input type="submit" value="{% trans "Save" %}" class="primaryAction" />
+            </div>
+        </fieldset>
+    </form>
+{% endblock %}

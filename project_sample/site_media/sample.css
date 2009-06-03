@@ -1,0 +1,315 @@
+body {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	width: 100%;
+	background: #fff;
+	font-size: 90%;
+	
+	color: #363942;
+}
+
+body, p, h1, h2, h3, h4, li, q, a {
+	line-height: 140%;
+}
+
+h1 {
+	font-weight: normal;
+	font-size: 200%;
+}
+h1 span {
+
+	font-size: 0.6em;
+	position: relative;
+	top: -1em;
+}
+h1 span a.active {
+	background: #96CA2D;
+	padding: 0.25em 1em;
+}
+h1 span a {
+	text-decoration: underline;
+	margin-left: 0.5em;
+}
+
+h2 {
+	font-weight: normal;	
+	font-size: 150%;
+}
+li {
+	/*line-height: 140%;*/
+}
+
+a {
+/*	color: #369;*/
+ 	color: #2A2C33;
+}
+
+a:hover {
+	color: #fff;
+	background: #96CA2D;
+	text-decoration: none;
+}
+
+h1, h2, h3 {
+	margin: .8em 0 .2em 0;
+	padding: 0;
+}
+
+p {
+	margin: .4em 0 .8em 0;
+	padding: 0;
+}
+
+img {
+	margin: 10px 0 5px;
+}
+
+/* Header styles */
+
+#header {
+	clear: both;
+	float: left;
+	width: 100%;
+}
+
+#header {
+	border-bottom: 1px solid #000;
+}
+
+#header p,
+	#header h1,
+	#header h2 {
+	padding: 1em 15px 0.2em;
+	margin: 0;
+}
+
+#header ul {
+	clear: left;
+	float: left;
+	width: 100%;
+	list-style: none;
+	margin: 10px 0 0 0;
+	padding: 0;
+}
+
+#header ul li {
+	display: inline;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+#header ul li a {
+	display: block;
+	float: left;
+	margin: 0 0 0 1px;
+	padding: 3px 10px;
+	text-align: center;
+/*	background: #eee;*/
+	background: #D2E8DF;
+	color: #000;
+	text-decoration: none;
+	position: relative;
+	left: 15px;
+/*	line-height: 1.3em;*/
+}
+
+#header ul li a:hover {
+	background: #369;
+	color: #fff;
+}
+
+#header ul li a.active,
+	#header ul li a.active:hover {
+	color: #fff;
+	background: #5Fa69C;
+	font-weight: bold;
+}
+
+#header ul li a span {
+	display: block;
+}
+
+/* 'widths' sub menu */
+
+#layoutdims {
+	clear: both;
+	background: #eee;
+	border-top: 4px solid #000;
+	margin: 0;
+	padding: 6px 15px !important;
+	text-align: right;
+}
+
+/* column container */
+
+.colmask {
+	position: relative;
+	clear: both;
+	float: left;
+	width: 100%;
+	overflow: hidden;
+}
+
+/* 2 column left menu settings */
+
+.leftmenu {
+/*	background: #bbb;*/
+	background: #7FC6BC;
+	
+}
+
+.leftmenu .colright {
+	float: left;
+	width: 200%;
+	position: relative;
+	left: 170px;
+	background: #fff;
+}
+
+.leftmenu .col1wrap {
+	float: right;
+	width: 50%;
+	position: relative;
+	right: 200px;
+	padding-bottom: 1em;
+}
+
+.leftmenu .col1 {
+	margin: 0 15px 0 215px;
+	position: relative;
+	right: 100%;
+	overflow: hidden;
+}
+
+.leftmenu .col2 {
+	float: left;
+	width: 150px;
+	position: relative;
+	right: 155px;
+}
+
+/* Footer styles */
+
+#footer {
+	clear: both;
+	float: left;
+	width: 100%;
+	border-top: 1px solid #000;
+}
+
+#footer p {
+	padding: 10px;
+	margin: 0;
+}
+
+/* menu styles */
+
+ul.commands {
+	font-family: helvetica,arial,sans-serif;
+	margin: 10px 0 0;
+	padding: 0;
+	width: 10em;
+}
+
+ul.commands li {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	margin: 0 0 0.3em 0;
+}
+
+ul.commands li a {
+	font-weight: bold;
+	text-decoration: none;
+	display: block;
+	padding: 0.3em;
+	background: #D8EFF1;
+	color: #000;
+	
+	border-left: 2px solid #fefefe;
+	border-top: 2px solid #fefefe;
+	border-bottom: 2px solid #999999;
+	border-right: 2px solid #999999;
+}
+
+ul.commands li a:hover {
+	border-bottom: 0.4em solid #000;
+	color: #000;
+}
+
+q:before, q:after {content:'';}
+
+.col1 q {
+	display: inline;
+	margin-left: 1em;
+}
+q a {
+	font-size: 80%;
+	text-decoration: none;
+	border-bottom: 1px dashed #a0a0a0;
+}
+q span {
+	color: #D2D2D2;
+}
+
+
+/* filter styles */
+ul.filters {
+	padding: 5px;
+	width: 100%;
+	float: left;
+	font-size: small;
+/*	text-transform: uppercase;*/
+	background-color: #96CA2D;
+/*	background-color: #E3E3E3;*/
+	margin: 0px 10px 24px 0;
+}
+
+ul.filters li {
+	list-style: none;
+	float: left;
+	margin-right: 8px;
+	margin-left: 8px;
+	padding: 3px 0 0;
+}
+ul.filters li .active {
+	background: #ffffff;
+	display: block;
+	padding: 0 6px;
+}
+
+ul.filters li a {
+	padding: 3px;
+}
+
+.col1 ul li {
+	list-style: none;
+}
+.col1 ul {
+	margin: 0.5em 0 2em 0;
+	clear: both;
+	position: relative;
+	width: 100%;
+}
+
+ul.filters li a:hover {
+	
+}
+
+/* design fancies */
+.rounded {
+	-webkit-border-bottom-left-radius: 6px;
+	-webkit-border-bottom-right-radius: 6px;
+	-webkit-border-top-left-radius: 6px;
+	-webkit-border-top-right-radius: 6px;
+	-moz-border-radius-bottomleft: 6px;
+	-moz-border-radius-bottomright: 6px;
+	-moz-border-radius-topleft: 6px;
+	-moz-border-radius-topright: 6px;
+}
+
+.round_up {
+	-moz-border-radius-topleft: 6px;
+	-moz-border-radius-topright: 6px;

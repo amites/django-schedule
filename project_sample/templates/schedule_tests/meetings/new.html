@@ -1,0 +1,18 @@
+{% extends "schedule_tests/base.html" %}
+{% load i18n %}
+
+{% block tab-id %}meetings-tab{% endblock %}
+
+{% block body %}
+    <h1>Add club {{ club.name }} meeting</h1>
+    <form action="{% url create_meeting club.id %}" method="post">
+        <fieldset class="inlineLabels">
+            <table>
+                {{ form.as_table }}
+            </table>
+            <div class="buttonHolder">
+                <input type="submit" value="{% trans "Create" %}" class="primaryAction" />
+            </div>
+        </fieldset>
+    </form>
+{% endblock %}

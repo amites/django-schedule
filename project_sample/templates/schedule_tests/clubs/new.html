@@ -1,0 +1,16 @@
+{% extends "schedule_tests/base.html" %}
+{% load i18n %}
+
+{% block body %}
+    <h1>Add club</h1>
+    <form action="{% url create_club %}" method="post">
+        <fieldset class="inlineLabels">
+            <table>
+                {{ form.as_table }}
+            </table>
+            <div class="buttonHolder">
+                <input type="submit" value="{% trans "Create" %}" class="primaryAction" />
+            </div>
+        </fieldset>
+    </form>
+{% endblock %}

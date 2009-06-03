@@ -1,0 +1,12 @@
+{% extends "schedule_tests/base.html" %}
+{% load i18n %}
+{% load schedule %}
+
+{% block body %}
+    <ul>
+        <li><a href="{% url edit_club club.id %}">Edit</a></li>
+    </ul>
+    <h1>{{ club.name }}</h1>
+    <p>{{ club.description }}</p>
+    
+{% endblock %}

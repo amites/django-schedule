@@ -1,0 +1,72 @@
+{% extends "schedule_tests/base.html" %}
+{% load i18n %}
+{% load scheduletags %}
+
+{% block tab-id %}meetings-tab{% endblock %}
+
+{% block extra_head %}
+{{ block.super }}
+<script type="text/javascript">
+Timeline_ajax_url="{{ MEDIA_URL }}timeline/timeline_ajax/simile-ajax-api.js";
+Timeline_urlPrefix='{{ MEDIA_URL }}timeline/timeline_js/';       
+Timeline_parameters='bundle=true';
+</script>
+<script type="text/javascript" src="{{ MEDIA_URL }}timeline/timeline_js/timeline-api.js"></script>
+{% endblock %}
+
+{% block left_menu %}
+<ul class="commands">
+</ul>
+{% endblock %}
+
+{% block body %}
+    <h1>Meetings
+        <span>
+            <a href="{% url list_meetings %}">List</a>
+            <a href="{% url list_meetings_calendar %}">Calendar</a>
+            <a href="{% url list_meetings_timeline %}" class="active">Timeline</a>
+        </span>
+    </h1>
+    
+    <div id="my-timeline" style="height: 300px; border: 1px solid #aaa"></div>
+    
+    <script type="text/javascript">
+    var tl;
+    var resizeTimerID = null;
+    
+    $(function(){
+        var eventSource = new Timeline.DefaultEventSource();
+        var bandInfos = [
+            Timeline.createBandInfo({
+                eventSource:    eventSource,
+                date:           "Jun 1 2009 00:00:00 GMT",
+                width:          "70%", 
+                intervalUnit:   Timeline.DateTime.MONTH, 
+                intervalPixels: 100
+            }),
+            Timeline.createBandInfo({
+                eventSource:    eventSource,
+                date:           "Jun 1 2009 00:00:00 GMT",
+                width:          "30%", 
+                intervalUnit:   Timeline.DateTime.YEAR, 
+                intervalPixels: 200
+            })
+        ];
+        bandInfos[1].syncWith = 0;
+        bandInfos[1].highlight = true;
+        
+        tl = Timeline.create(document.getElementById("my-timeline"), bandInfos);
+        
+        Timeline.loadXML("{% url meetings_timeline_data %}", function(xml, url) { eventSource.loadXML(xml, url); });
+        
+        $(window).bind('resize', function() {
+            if (resizeTimerID == null) {
+                resizeTimerID = window.setTimeout(function() {
+                    resizeTimerID = null;
+                    tl.layout();
+                }, 500);
+            }
+        });
+    });
+    </script>
+{% endblock %}

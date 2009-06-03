@@ -1,0 +1,19 @@
+{% extends "schedule_tests/base.html" %}
+{% load i18n %}
+
+{% block body %}
+    <ul>
+        <li><a href="{% url create_club %}">Create</a></li>
+    </ul>
+    {% if clubs %}
+        {% for club in clubs %}
+        <h1><a href="{% url show_club club.id %}">{{ club.name }}</a></h1>
+        <p>{{ club.description }}</p>
+        <ul>
+            <li>Event 1</li>
+        </ul>
+        {% endfor %}
+    {% else %}
+        <p>{% blocktrans %}No clubs were found.{% endblocktrans %}</p>
+    {% endif %}
+{% endblock %}

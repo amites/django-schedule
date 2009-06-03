@@ -1,0 +1,18 @@
+{% extends "schedule_tests/base.html" %}
+{% load i18n %}
+{% load scheduletags %}
+
+{% block tab-id %}meetings-tab{% endblock %}
+
+{% block left_menu %}
+<ul class="commands">
+    <li><a href="{% url edit_meeting meeting.id %}">Edit</a></li>
+    <li><a href="{% url show_club meeting.club.id %}">Back</a></li>
+</ul>
+{% endblock %}
+
+{% block body %}
+    <h1>Meeting for {{ meeting.club.name }} at {{ meeting.start|date }}</h1>
+    <p>Place: {{ meeting.place }}</p>
+    <p>{{ meeting.club.description }}</p>
+{% endblock %}

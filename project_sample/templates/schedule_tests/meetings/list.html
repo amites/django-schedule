@@ -1,0 +1,64 @@
+{% extends "schedule_tests/base.html" %}
+{% load i18n %}
+{% load scheduletags %}
+
+{% block tab-id %}meetings-tab{% endblock %}
+
+{% block extra_head %}
+{{ block.super }}
+<script type="text/javascript" src="{{ MEDIA_URL }}daterangepicker/js/jquery-ui-1.7.1.custom.min.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}daterangepicker/js/daterangepicker.jQuery.js"></script>
+
+<link rel="stylesheet" href="{{ MEDIA_URL }}daterangepicker/css/ui.daterangepicker.css" type="text/css" />
+<link rel="stylesheet" href="{{ MEDIA_URL }}daterangepicker/css/redmond/jquery-ui-1.7.1.custom.css" type="text/css" title="ui-theme" />
+{% endblock %}
+
+{% block left_menu %}
+<ul class="commands">
+</ul>
+{% endblock %}
+
+{% block body %}
+    {% if meetings %}
+        <h1>Meetings
+            <span>
+                <a href="#" class="active">List</a>
+                <a href="{% url list_meetings_calendar %}">Calendar</a>
+                <a href="{% url list_meetings_timeline %}">Timeline</a>
+            </span>
+        </h1>
+        
+        <ul class="filters rounded">
+            <li><a href="{% date_filter start fromtoday %}" id="start-fromtoday">All</a></li>
+            <li><a href="{% date_filter start today %}" id="start-today">Today</a></li>
+            <li><a href="{% date_filter start thisweek %}" id="start-thisweek">This week</a></li>
+            <li><a href="{% date_filter start thismonth %}" id="start-thismonth">This month</a></li>
+            <li><form action="{% date_filter start %}" method="get"><input type="text" value="Click to select dates.." id="daterange" name="daterange" class="rounded"/></form></li>
+        </ul>
+        <script type="text/javascript">
+        $(function(){
+            $('#daterange').daterangepicker( {
+              presetRanges: [
+                {text: 'My Range', dateStart: '03/07/08', dateEnd: 'Today' }
+              ],
+              arrows: false
+             } );
+        });
+        </script>
+        {% if datefilter %}
+        <script type="text/javascript">
+        $(function() {
+            $('#{{ datefilter }}').addClass('active');
+        });
+        </script>
+        {% endif %}
+                
+        {% for meeting in meetings %}
+        <h2><a href="{% url show_meeting meeting.id %}">{{ meeting.start|date }} - {{ meeting.end|date}}: {{ meeting.place }}</a></h2>
+        <p>Club: {{ meeting.club.name }}</p>
+        <p>{{ meeting.club.description }}</p>
+        {% endfor %}
+    {% else %}
+        <p>{% blocktrans %}No meetings were found.{% endblocktrans %}</p>
+    {% endif %}
+{% endblock %}
