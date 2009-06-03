@@ -6,7 +6,7 @@ import time
 
 
 class SpanForm(forms.ModelForm):
-
+    """Simple form with 'start' and 'end' fields. Is not binded to any model"""
     start = forms.DateTimeField(widget=forms.SplitDateTimeWidget)
     end = forms.DateTimeField(widget=forms.SplitDateTimeWidget, help_text = _("The end time must be later than start time."))
 

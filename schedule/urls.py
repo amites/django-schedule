@@ -37,11 +37,15 @@ url(r'^calendar/week/(?P<calendar_slug>[-\w]+)/$',
     kwargs={'periods': [Week], 'template_name': 'schedule/calendar_week.html'}),
 url(r'^calendar/daily/(?P<calendar_slug>[-\w]+)/$', 
     'schedule.views.calendar_by_periods', 
-    name = "day_calendar",
-    kwargs={'periods': [Day], 'template_name': 'schedule/calendar_day.html'}),
+    kwargs={'periods': [Day], 'template_name': 'schedule/calendar_day.html'},
+    name = "day_calendar"
+    ),
 url(r'^calendar/(?P<calendar_slug>[-\w]+)/$', 
     'schedule.views.calendar', 
     name = "calendar"),
+url(r'^timeline/(?P<calendar_slug>[-\w]+)/$', 
+    'schedule.views.timeline_data', 
+    name = "timeline_data"),
 
 #Event Urls
 url(r'^event/create/(?P<calendar_slug>[-\w]+)/$',
@@ -87,5 +91,5 @@ url(r'^feed/calendar/(.*)/$',
  
 (r'^ical/calendar/(.*)/$', CalendarICalendar()),
 
- url(r'$', object_list, info_dict, name='schedule'), 
+url(r'$', object_list, info_dict, name='schedule'), 
 )

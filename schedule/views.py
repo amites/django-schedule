@@ -332,3 +332,34 @@ def get_next_url(request, default):
     if 'next' in request.REQUEST and check_next_url(request.REQUEST['next']) is not None:
         next = request.REQUEST['next']
     return next
+
+import elementtree.ElementTree as ET
+
+def create_event_node(head, occurence):
+    """Create event data node by occurence instance."""
+    event = ET.SubElement(head, 'event')
+    event.set('start', occurence.start.strftime("%b %d %Y %H:%M:%S %Z"))
+    event.set('end', occurence.end.strftime("%b %d %Y %H:%M:%S %Z"))
+    if (occurence.end - occurence.start).days == 0:
+        event.set('isDuration', 'false')
+    else:
+        event.set('isDuration', 'true')
+    if occurence.title is not None and occurence.title.strip() != '':
+        event.set('title', occurence.title)
+    elif occurence.event.title is not None and occurence.event.title.strip() != '':
+        event.set('title', occurence.event.title)
+        
+    return event
+
+def timeline_data(request, calendar_slug):
+    """
+    Returns timeline XML data. See http://code.google.com/p/simile-widgets/wiki/Timeline_EventSources
+    """
+    calendar = get_object_or_404(Calendar, slug=calendar_slug)
+    
+    head = ET.Element('data')
+    
+    for occurence in calendar.occurrences_after():
+        create_event_node(head, occurence)
+    
+    return HttpResponse(ET.tostring(head), mimetype="text/xml")

@@ -115,7 +115,7 @@ class Period(object):
                 return True
         return False
 
-    def get_time_slot(self, start, end ):
+    def get_time_slot(self, start, end):
         if start >= self.start and end <= self.end:
             return Period( self.events, start, end )
         return None
