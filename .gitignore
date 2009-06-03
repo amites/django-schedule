@@ -1,0 +1,5 @@
+*.pyc
+*.db
+*.kpf
+.DS_Store
+
