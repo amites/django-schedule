@@ -1,1 +1,11 @@
 {% extends "site_base.html" %}
+
+{% block extra_head %}
+<script type="text/javascript" src="{{ MEDIA_URL }}daterangepicker/js/jquery-1.3.1.min.js"></script>
+{% endblock %}
+
+{% block main_menu %}
+<li><a href="{% url list_clubs %}" id="clubs-tab" class="round_up">Clubs</a></li>
+<li><a href="{% url list_meetings %}" id="meetings-tab" class="round_up">Meetings</a></li>
+{% endblock %}
+

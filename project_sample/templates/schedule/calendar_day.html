@@ -1,7 +1,6 @@
 {% extends "schedule/base.html" %}
 {% load scheduletags %}
 
-
 {% block body %}
 
 {% include "schedule/_dialogs.html" %}
@@ -17,6 +16,7 @@
     Year
   </a>
 </div>
+
 <div class="tablewrapper">
     <div class="calendarname">{{ calendar.name }}</div>
     {% prevnext "day_calendar" calendar.slug periods.day "l, F d, Y" %}
@@ -26,6 +26,7 @@
       </a>
     </div>
 </div>
+
 <div style="position:absolute;">
     <div style="position:absolute;left:100px;">
       {% daily_table periods.day 420 120 600 0 12 %}

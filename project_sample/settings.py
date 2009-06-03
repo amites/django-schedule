@@ -67,6 +67,14 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.core.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    'django.core.context_processors.request',
+)
+
 ROOT_URLCONF = 'project_sample.urls'
 
 TEMPLATE_DIRS = (
@@ -96,3 +104,4 @@ INSTALLED_APPS = (
 #
 #SCHEDULE_EVENT_EDITOR_TEST = _test_user_fuction
 FIRST_DAY_OF_WEEK = 1
+

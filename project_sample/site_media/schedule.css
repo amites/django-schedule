@@ -6,6 +6,8 @@ div.slot_column {
   left:0px;
   border:1px solid black;
   border-right:none;
+  width: 120px;
+  height: 600px;
 }
 
 div.slot {
@@ -224,14 +226,6 @@ div.time-picker li.selected {
 #id_start_1, #id_end_1 { width:80px;}
 
 /**** GENERAL SETTINGS ****/
-
-#demo {
-  border-color:#e0e0e0;
-  border-style:solid;
-  border-width: 0 3px 3px 0;
-  float:left;
-  padding-right:5px;
-}
 
 body, td {font-family:sans-serif;}
 

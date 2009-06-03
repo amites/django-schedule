@@ -6,6 +6,13 @@
 
 {% block tab_id %}id="home_tab"{% endblock %}
 
+{% block left_menu %}
+<ul class="commands">
+    <li><a href="{% url list_clubs %}">Demo site</a></li>
+    <li><a href="{% url schedule %}">List calendars</a></li>
+</ul>
+{% endblock %}
+
 {% block body %}
     {% blocktrans %}
         <h1>django-schedule</h1>
@@ -24,6 +31,7 @@
         <p><code>./manage.py load_example_data</code></p>
     {% endblocktrans %}
     <p><a href="{% url schedule %}">{% trans "The list of available Calendars." %}</a></p><br/>
+    <p><a href="{% url list_clubs %}">{% trans "Demo application." %}</a></p><br/>
     {% blocktrans %}
         <h3>Project Owner</h3>
         <ul>

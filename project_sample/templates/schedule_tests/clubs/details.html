@@ -1,12 +1,42 @@
 {% extends "schedule_tests/base.html" %}
 {% load i18n %}
-{% load schedule %}
+{% load scheduletags %}
+
+{% block tab-id %}clubs-tab{% endblock %}
+
+{% block left_menu %}
+<ul class="commands">
+    <li><a href="{% url edit_club club.id %}">Edit</a></li>
+    <li><a href="{% url create_meeting club.id %}">Add meeting</a></li>
+    <li><a href="{% url list_clubs %}">Back</a></li>
+</ul>
+{% endblock %}
 
 {% block body %}
-    <ul>
-        <li><a href="{% url edit_club club.id %}">Edit</a></li>
-    </ul>
-    <h1>{{ club.name }}</h1>
+    {% get_calendar club as cal %}
+    <h1>Club: {{ club.name }}
+        <span>
+            <a href="#" class="active">Details</a>
+            <a href="{% url show_club_timeline club.id %}">Timeline</a>
+            <a href="{% url compact_calendar cal.slug %}">Small Month</a>
+            <a href="{% url month_calendar cal.slug %}">1 Month</a>
+            <a href="{% url tri_month_calendar cal.slug %}">3 Months</a>
+            <a href="{% url year_calendar cal.slug %}">This Year</a>
+            <a href="{% url week_calendar cal.slug %}">Weekly</a>
+            <a href="{% url day_calendar cal.slug %}">Daily</a>
+            <a href="/schedule/feed/calendar/upcoming/{{ cal.id }}/">Feed</a>
+        </span>
+    </h1>
     <p>{{ club.description }}</p>
     
+    {% if club.meetings %}
+    <ul>
+    {% for meeting in club.meetings.all %}
+        <li>
+            <a href="{% url show_meeting meeting.id %}">{{ meeting.start|date }}: {{ meeting.place }}</a>
+            <a href="{% url delete_meeting meeting.id %}">Remove</a>
+        </li>
+    {% endfor %}
+    </ul>
+    {% endif %}
 {% endblock %}

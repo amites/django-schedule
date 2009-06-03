@@ -8,6 +8,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^$', direct_to_template,{"template":"homepage.html"}),
     (r'^schedule/', include('schedule.urls')),
+    (r'^schedule_tests/', include('schedule_tests.urls')),
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs'
     # to INSTALLED_APPS to enable admin documentation:

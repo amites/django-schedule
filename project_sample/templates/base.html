@@ -4,41 +4,60 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <title>{% if site_name %}{{ site_name }} : {% endif %}{% block head_title %}{% endblock %}</title>
+        <link href="{{ MEDIA_URL }}schedule.css" rel="stylesheet" type="text/css" media="screen" />
+        <link href="{{ MEDIA_URL }}sample.css" rel="stylesheet" type="text/css" media="screen" />
         <!--[if IE]><style>
             div {
                 zoom: 1; /* trigger hasLayout */
             }
         </style><![endif]-->
-        {% if LANGUAGE_BIDI %}
-        <style type="text/css" media="screen">
-            div.right_panel {
-                float: left; /* hotfix for sidebar */
-            }
-        </style>
-        {% endif %}
         {% block extra_head %}
         {% endblock %}
     </head>
 
     <body>
-    <h3 id="demo">This is a demo of a django-schedule calendar</h3>
-    <p style="clear:both"/>
-
-        <div id="body">
-            {% if messages %}
-                <ul id="messages">
-                    {% for message in messages %}
-                    <li id="message_{{ forloop.counter }}"><a href="#" onclick="$('#message_{{ forloop.counter }}').fadeOut(); return false;"><small>{% trans "clear" %}</small></a> {{ message }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-
-            {% block body %}
-            {% endblock %}
-
+        <div id="header">
+            <h1>This is a demo of a django-schedule calendar</h1>
+            <ul id="main-nav">
+                {% block main_menu %}{% endblock %}
+            </ul>
+            <script type="text/javascript">
+            $(function(){
+                var tabId = '{% block tab-id %}{% endblock %}';
+                if (tabId != '') {
+                   $('#' + tabId).addClass('active');
+                }
+            });
+            </script>
         </div>
 
-        <div id="footer">{% block footer %}{% endblock %}</div>
+        <div class="colmask leftmenu">
+            <div class="colright">
+                <div class="col1wrap">
+                    <div class="col1">
+                    
+                    {% if messages %}
+                        <ul id="messages">
+                            {% for message in messages %}
+                            <li id="message_{{ forloop.counter }}"><a href="#" onclick="$('#message_{{ forloop.counter }}').fadeOut(); return false;"><small>{% trans "clear" %}</small></a> {{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+        
+                    {% block body %}
+                    {% endblock %}
+                        
+                    </div>
+                </div>
+                <div class="col2">
+                    {% block left_menu %}{% endblock %}
+                </div>
+            </div>
+        </div>
+    
+        <div id="footer">
+            <p>django-schedule sample</p>
+        </div>
 
     </body>
 </html>

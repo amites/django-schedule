@@ -1,17 +1,44 @@
 {% extends "schedule_tests/base.html" %}
 {% load i18n %}
+{% load scheduletags %}
+
+{% block tab-id %}clubs-tab{% endblock %}
+
+{% block extra_head %}
+{{ block.super }}
+<script type="text/javascript" src="{{ MEDIA_URL }}daterangepicker/js/jquery-ui-1.7.1.custom.min.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}daterangepicker/js/daterangepicker.jQuery.js"></script>
+
+<link rel="stylesheet" href="{{ MEDIA_URL }}daterangepicker/css/ui.daterangepicker.css" type="text/css" />
+<link rel="stylesheet" href="{{ MEDIA_URL }}daterangepicker/css/redmond/jquery-ui-1.7.1.custom.css" type="text/css" title="ui-theme" />
+{% endblock %}
+
+{% block left_menu %}
+<ul class="commands">
+    <li><a href="{% url create_club %}">Create</a></li>
+</ul>
+{% endblock %}
 
 {% block body %}
-    <ul>
-        <li><a href="{% url create_club %}">Create</a></li>
-    </ul>
+    <h1>Clubs
+        <span>
+            <a href="{% url list_clubs %}" class="active">List</a>
+            <a href="{% url list_meetings_timeline %}">Timeline</a>
+        </span>
+    </h1>
     {% if clubs %}
+                    
         {% for club in clubs %}
         <h1><a href="{% url show_club club.id %}">{{ club.name }}</a></h1>
         <p>{{ club.description }}</p>
+        
+        {% if club.meetings %}
         <ul>
-            <li>Event 1</li>
+            {% for meeting in club.meetings.all %}
+            <li><a href="{% url show_meeting meeting.id %}">{{ meeting.start|date }}: {{ meeting.place }}</a></li>
+            {% endfor %}
         </ul>
+        {% endif %}
         {% endfor %}
     {% else %}
         <p>{% blocktrans %}No clubs were found.{% endblocktrans %}</p>
