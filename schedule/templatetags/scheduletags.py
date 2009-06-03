@@ -3,8 +3,10 @@ from django.conf import settings
 from django import template
 from django.core.urlresolvers import reverse
 from django.utils.dateformat import format
-from schedule.models import Calendar
-from schedule.periods import weekday_names, weekday_abbrs,  Month
+from schedule import DATE_FILTER_FIELD, DATE_FILTER_RANGE
+from schedule.models import Calendar, EventRelation
+from schedule.periods import weekday_names, weekday_abbrs, Month
+from schedule.filters import DATE_RANGE_ALIASES
 
 register = template.Library()
 
@@ -109,6 +111,33 @@ def do_get_calendar_for_object(parser, token):
         raise template.TemplateSyntaxError, "%r tag follows form %r <content_object> as <context_var>" % (token.contents.split()[0], token.contents.split()[0])
     return CalendarNode(content_object, distinction, context_var)
 
+class EventsNode(template.Node):
+    def __init__(self, content_object, inherited, context_var):
+        self.content_object = template.Variable(content_object)
+        self.inherited = inherited
+        self.context_var = context_var
+
+    def render(self, context):
+        events = EventRelation.objects.get_events_for_object(self.content_object.resolve(context), inherit = self.inherited)
+        context[self.context_var] = events
+        return ''
+
+def do_get_inherited_events_for_object(parser, token):
+    contents = token.split_contents()
+    if len(contents) == 4:
+        tag_name, content_object, _, context_var = contents
+    else:
+        raise template.TemplateSyntaxError, "%r tag follows form %r <content_object> as <context_var>" % (token.contents.split()[0], token.contents.split()[0])
+    return EventsNode(content_object, True, context_var)
+
+def do_get_events_for_object(parser, token):
+    contents = token.split_contents()
+    if len(contents) == 4:
+        tag_name, content_object, _, context_var = contents
+    else:
+        raise template.TemplateSyntaxError, "%r tag follows form %r <content_object> as <context_var>" % (token.contents.split()[0], token.contents.split()[0])
+    return EventsNode(content_object, False, context_var)
+
 class CreateCalendarNode(template.Node):
     def __init__(self, content_object, distinction, context_var, name):
         self.content_object = template.Variable(content_object)
@@ -148,6 +177,8 @@ def do_get_or_create_calendar_for_object(parser, token):
 
 register.tag('get_calendar', do_get_calendar_for_object)
 register.tag('get_or_create_calendar', do_get_or_create_calendar_for_object)
+register.tag('get_events', do_get_events_for_object)
+register.tag('get_inherited_events', do_get_inherited_events_for_object)
 
 @register.simple_tag
 def querystring_for_date(date, num=6):
@@ -265,3 +296,63 @@ def _cook_slots(period, increment, width, height):
 @register.simple_tag
 def hash_occurrence(occ):
     return '%s_%s' % (occ.start.strftime('%Y%m%d%H%M%S'), occ.event.id)
+
+def date_filter(parser, token):
+    """
+    Parses a tag that's supposed to be in this format: {% date_filter field today %}
+    Date range alias is taken from DATE_RANGES dictionary.
+    """
+    bits = [b.strip('"\'') for b in token.split_contents()]
+    if len(bits) < 2:
+        raise TemplateSyntaxError, "anchor tag takes 2 arguments"
+    try:
+        date_range = bits[2].strip().lower()
+    except IndexError:
+        date_range = None
+    return DateFilterNode(bits[1].strip(), date_range)
+
+date_filter = register.tag(date_filter)
+
+class DateFilterNode(template.Node):
+    """
+    Renders href attribute value with current URL and date filter.
+
+    Eg.
+        {% datefilter start today %} generates
+        "/the/current/path/?datefield=start&daterange=today"
+        
+    Sets context variable named "datefilter" to field + range value for
+    aliased filters. I.e. context['datefilter'] = 'start-today'
+
+    """
+    def __init__(self, field, date_range = 'today'):
+        self.field = field
+        self.date_range = date_range
+
+    def render(self, context):
+        request = context['request']
+        getvars = request.GET.copy()
+        filter_field = None
+        if DATE_FILTER_FIELD in getvars:
+            filter_field = getvars[DATE_FILTER_FIELD]
+            del getvars[DATE_FILTER_FIELD]
+        filter_range = None
+        if DATE_FILTER_RANGE in getvars:
+            filter_range = getvars[DATE_FILTER_RANGE]
+            del getvars[DATE_FILTER_RANGE]
+        
+        if self.date_range is not None:
+            ## TODO: try to parse date or date range
+            if not(self.date_range in DATE_RANGE_ALIASES):
+                raise KeyError('Unknown date alias "%s"' % self.date_range)
+            if filter_field == self.field and filter_range == self.date_range:
+                context['datefilter'] = self.field + '-' + self.date_range
+            
+        if len(getvars.keys()) > 0:
+            urlappend = "&%s" % getvars.urlencode()
+        else:
+            urlappend = ''
+
+        url = '%s?%s=%s&%s=%s%s' % (request.path, DATE_FILTER_FIELD, self.field,
+                                    DATE_FILTER_RANGE, self.date_range, urlappend)
+        return url
